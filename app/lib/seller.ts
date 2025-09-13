@@ -31,7 +31,7 @@ const getGoogleAccessToken = async (): Promise<string> => {
   return "placeholder_token";
 };
 
-export const connectCalendar = async (user: any) => {
+export const connectCalendar = async (user: { uid: string; displayName: string | null; email: string | null }) => {
   try {
     console.log("Connecting calendar for user:", user.uid);
 

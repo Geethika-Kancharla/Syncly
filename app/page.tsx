@@ -30,7 +30,7 @@ export default function HomePage() {
         const snap = await getDoc(userRef);
 
         if (snap.exists()) {
-          const data = snap.data() as any;
+          const data = snap.data() as { role?: "buyer" | "seller"; uid: string; name: string; email: string };
           console.log("User document exists:", data);
           
           if (data.role) {

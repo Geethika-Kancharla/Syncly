@@ -1,9 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/app/lib/auth";
 import { logout } from "@/app/lib/firebase";
 import { useRouter } from "next/navigation";
-import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/app/lib/firebase";
 import { 
   connectCalendar, 
@@ -34,8 +34,8 @@ export default function SellerDashboard() {
   const { user } = useAuth();
   const router = useRouter();
   const [sellerData, setSellerData] = useState<SellerData | null>(null);
-  const [busySlots, setBusySlots] = useState<any[]>([]);
-  const [calendarEvents, setCalendarEvents] = useState<any[]>([]);
+  const [busySlots, setBusySlots] = useState<{ start: string; end: string }[]>([]);
+  const [calendarEvents, setCalendarEvents] = useState<{ id: string; summary?: string; start?: { dateTime?: string; date?: string } }[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(false);
   const [connecting, setConnecting] = useState(false);
@@ -45,6 +45,50 @@ export default function SellerDashboard() {
     workingDays: [1, 2, 3, 4, 5],
     slotDuration: 30
   });
+
+  const fetchCalendarData = useCallback(async () => {
+    if (!user) return;
+    
+    try {
+      const now = new Date();
+      const weekLater = new Date();
+      weekLater.setDate(now.getDate() + 7);
+
+      const [freeBusy, events] = await Promise.all([
+        getFreeBusy(now.toISOString(), weekLater.toISOString()),
+        getCalendarEvents(now.toISOString(), weekLater.toISOString())
+      ]);
+
+      setBusySlots(freeBusy.calendars["primary"].busy || []);
+      setCalendarEvents(events);
+    } catch (err) {
+      console.error("Error fetching calendar data:", err);
+    }
+  }, [user]);
+
+  const fetchBookings = useCallback(async () => {
+    if (!user) return;
+    
+    try {
+      const bookingsRef = collection(db, "bookings");
+      const q = query(
+        bookingsRef, 
+        where("sellerUid", "==", user.uid)
+      );
+      const querySnapshot = await getDocs(q);
+      const bookingsData: Booking[] = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Booking[];
+      
+      // Sort by startTime on the client side to avoid needing a composite index
+      bookingsData.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+      
+      setBookings(bookingsData);
+    } catch (err) {
+      console.error("Error fetching bookings:", err);
+    }
+  }, [user]);
 
   useEffect(() => {
     if (!user) return;
@@ -73,51 +117,7 @@ export default function SellerDashboard() {
     };
 
     loadSellerData();
-  }, [user]);
-
-  const fetchCalendarData = async () => {
-    if (!user) return;
-    
-    try {
-      const now = new Date();
-      const weekLater = new Date();
-      weekLater.setDate(now.getDate() + 7);
-
-      const [freeBusy, events] = await Promise.all([
-        getFreeBusy(now.toISOString(), weekLater.toISOString()),
-        getCalendarEvents(now.toISOString(), weekLater.toISOString())
-      ]);
-
-      setBusySlots(freeBusy.calendars["primary"].busy || []);
-      setCalendarEvents(events);
-    } catch (err) {
-      console.error("Error fetching calendar data:", err);
-    }
-  };
-
-  const fetchBookings = async () => {
-    if (!user) return;
-    
-    try {
-      const bookingsRef = collection(db, "bookings");
-      const q = query(
-        bookingsRef, 
-        where("sellerUid", "==", user.uid)
-      );
-      const querySnapshot = await getDocs(q);
-      const bookingsData: Booking[] = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Booking[];
-      
-      // Sort by startTime on the client side to avoid needing a composite index
-      bookingsData.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
-      
-      setBookings(bookingsData);
-    } catch (err) {
-      console.error("Error fetching bookings:", err);
-    }
-  };
+  }, [user, fetchBookings, fetchCalendarData]);
 
   const handleConnectCalendar = async () => {
     if (!user) return;
@@ -459,13 +459,13 @@ NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com`}
           {sellerData?.calendarConnected && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="bg-white border border-gray-200 p-6 rounded-lg">
-                <h3 className="text-lg font-semibold mb-4">This Week's Busy Times</h3>
+                <h3 className="text-lg font-semibold mb-4">This Week&apos;s Busy Times</h3>
           {loading ? (
             <p>Loading availability...</p>
           ) : (
                   <div className="space-y-2">
               {busySlots.length === 0 ? (
-                      <p className="text-green-600">You're fully free this week 🎉</p>
+                      <p className="text-green-600">You&apos;re fully free this week 🎉</p>
               ) : (
                 busySlots.map((slot, idx) => (
                         <div key={idx} className="border border-red-200 bg-red-50 p-3 rounded">
@@ -495,7 +495,7 @@ NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com`}
                           <p className="text-sm text-blue-600">
                             {event.start?.dateTime ? 
                               new Date(event.start.dateTime).toLocaleString() :
-                              new Date(event.start?.date).toLocaleDateString()
+                              event.start?.date ? new Date(event.start.date).toLocaleDateString() : 'No date'
                             }
                           </p>
                         </div>
