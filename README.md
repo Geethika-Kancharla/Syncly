@@ -4,7 +4,7 @@ A modern, full-stack appointment scheduling platform built with Next.js, Firebas
 
 ## Demo Video
 
-(https://github.com/user-attachments/assets/41d06685-c190-45b0-9b68-fdb384b3f4b0)
+https://github.com/user-attachments/assets/41d06685-c190-45b0-9b68-fdb384b3f4b0
 
 ##  Features
 
