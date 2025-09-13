@@ -52,7 +52,7 @@ Before running this project, ensure you have:
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/Geethika-Kancharla/Syncly.git
 cd fet
 ```
 
@@ -153,37 +153,7 @@ fet/
 3. Choose a time slot and confirm booking
 4. Receive calendar invite and confirmation
 
-```
-
-### Google Calendar API Scopes
-
-The application requires the following Google Calendar scopes:
-- `https://www.googleapis.com/auth/calendar`
-- `https://www.googleapis.com/auth/calendar.events`
-
-##  Troubleshooting
-
-### Common Issues
-
-1. **Calendar not connecting**: Check Google API credentials and scopes
-2. **Authentication errors**: Verify Firebase configuration
-3. **Environment variables**: Ensure all required variables are set
-4. **CORS issues**: Check Google OAuth redirect URIs
-
-### Debug Mode
-
-Enable debug logging by checking browser console for detailed error messages.
-
-##  Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ##  License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-
