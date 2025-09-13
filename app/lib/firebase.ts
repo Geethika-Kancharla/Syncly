@@ -11,17 +11,14 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID!,
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Auth and provider
 export const auth = getAuth(app);
 export const provider = new GoogleAuthProvider();
 
-// Firestore
+
 export const db = getFirestore(app);
 
-// Helper functions
 export const loginWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, provider);
@@ -40,7 +37,7 @@ export const logout = async () => {
   }
 };
 
-// Enhanced Google login for sellers with calendar scopes
+
 export const loginWithGoogleForSeller = async () => {
   try {
     const provider = new GoogleAuthProvider();

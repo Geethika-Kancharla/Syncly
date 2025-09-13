@@ -176,49 +176,84 @@ export default function SellerDashboard() {
   };
 
   return (
-    <main className="p-6 max-w-6xl mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">Seller Dashboard</h2>
-        <div className="flex gap-3">
-          {sellerData?.calendarConnected && (
-            <button
-              onClick={() => setShowAvailabilityEditor(!showAvailabilityEditor)}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-            >
-              {showAvailabilityEditor ? "Hide" : "Edit"} Availability
-            </button>
-          )}
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-          >
-            Logout
-          </button>
+    <div className="min-h-screen bg-gray-50">
+      <div className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-6">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Seller Dashboard</h1>
+              <p className="text-gray-600 mt-1">Manage your availability and bookings</p>
+            </div>
+            <div className="flex gap-3">
+              {sellerData?.calendarConnected && (
+                <button
+                  onClick={() => setShowAvailabilityEditor(!showAvailabilityEditor)}
+                  className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200 font-medium"
+                >
+                  {showAvailabilityEditor ? "Hide" : "Edit"} Availability
+                </button>
+              )}
+              <button
+                onClick={handleLogout}
+                className="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 transition-colors duration-200 font-medium"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
       {user ? (
-        <div className="space-y-6">
+        <div className="space-y-8">
           {/* Welcome Section */}
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <p className="text-lg">Hello {user.displayName}! 👋</p>
-            <p className="text-gray-600">Manage your calendar and availability settings.</p>
+          <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl p-8 text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-3xl font-bold mb-2">Hello {user.displayName}! 👋</h2>
+                <p className="text-blue-100 text-lg">Manage your calendar and availability settings</p>
+              </div>
+              <div className="hidden md:block">
+                <div className="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                  <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Configuration Check */}
-          <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
-            <h3 className="font-semibold text-blue-800 mb-2">Configuration Status</h3>
-            <div className="text-sm text-blue-700 space-y-1">
-              <p>Google Client ID: {process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ? "✅ Set" : "❌ Missing"}</p>
-              <p>Firebase API Key: {process.env.NEXT_PUBLIC_FIREBASE_API_KEY ? "✅ Set" : "❌ Missing"}</p>
-              <p>Firebase Auth Domain: {process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ? "✅ Set" : "❌ Missing"}</p>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center mb-4">
+              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900">Configuration Status</h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="flex items-center">
+                <span className={`w-3 h-3 rounded-full mr-3 ${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                <span className="text-sm text-gray-700">Google Client ID</span>
+              </div>
+              <div className="flex items-center">
+                <span className={`w-3 h-3 rounded-full mr-3 ${process.env.NEXT_PUBLIC_FIREBASE_API_KEY ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                <span className="text-sm text-gray-700">Firebase API Key</span>
+              </div>
+              <div className="flex items-center">
+                <span className={`w-3 h-3 rounded-full mr-3 ${process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                <span className="text-sm text-gray-700">Firebase Auth Domain</span>
+              </div>
             </div>
             {!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID && (
-              <div className="mt-3 p-3 bg-yellow-100 border border-yellow-300 rounded">
+              <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                 <p className="text-sm text-yellow-800">
                   <strong>Setup Required:</strong> Please add the following environment variables to your <code>.env.local</code> file:
                 </p>
-                <pre className="text-xs mt-2 bg-white p-2 rounded border">
+                <pre className="text-xs mt-2 bg-white p-3 rounded border font-mono">
 {`NEXT_PUBLIC_GOOGLE_CLIENT_ID=your_google_client_id.apps.googleusercontent.com
 NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com`}
@@ -227,43 +262,58 @@ NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com`}
             )}
           </div>
 
-          {/* Calendar Connection Status */}
           {!sellerData?.calendarConnected ? (
-            <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
-              <h3 className="font-semibold text-yellow-800 mb-2">Connect Your Calendar</h3>
-              <p className="text-yellow-700 mb-4">
-                Connect your Google Calendar to start managing your availability and appointments.
-                <br />
-                <span className="text-sm text-yellow-600">
-                  Note: Calendar permissions were already granted during sign-in. This will enable calendar features.
-                </span>
-              </p>
-              <button
-                onClick={handleConnectCalendar}
-                disabled={connecting}
-                className="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600 disabled:opacity-50"
-              >
-                {connecting ? "Connecting..." : "Enable Calendar Features"}
-              </button>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <div className="flex items-start">
+                <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                  <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Connect Your Calendar</h3>
+                  <p className="text-gray-600 mb-4">
+                    Connect your Google Calendar to start managing your availability and appointments.
+                  </p>
+                  <p className="text-sm text-gray-500 mb-4">
+                    Note: Calendar permissions were already granted during sign-in. This will enable calendar features.
+                  </p>
+                  <button
+                    onClick={handleConnectCalendar}
+                    disabled={connecting}
+                    className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 disabled:opacity-50 font-medium transition-colors duration-200"
+                  >
+                    {connecting ? "Connecting..." : "Enable Calendar Features"}
+                  </button>
+                </div>
+              </div>
             </div>
           ) : (
-            <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
-              <h3 className="font-semibold text-green-800 mb-2">✅ Calendar Connected</h3>
-              <p className="text-green-700">
-                Your Google Calendar is connected and ready to use. 
-                You can manage your availability and view your schedule.
-              </p>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <div className="flex items-start">
+                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Calendar Connected</h3>
+                  <p className="text-gray-600">
+                    Your Google Calendar is connected and ready to use. 
+                    You can manage your availability and view your schedule.
+                  </p>
+                </div>
+              </div>
             </div>
           )}
 
-          {/* Availability Editor */}
           {showAvailabilityEditor && sellerData?.calendarConnected && (
             <div className="bg-white border border-gray-200 p-6 rounded-lg">
               <h3 className="text-lg font-semibold mb-4">Availability Settings</h3>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-black mb-2">
                     Working Hours
                   </label>
                   <div className="flex gap-2">
@@ -274,9 +324,9 @@ NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com`}
                         ...prev,
                         workingHours: { ...prev.workingHours, start: e.target.value }
                       }))}
-                      className="border border-gray-300 rounded px-3 py-2"
+                      className="border border-gray-300 text-black rounded px-3 py-2"
                     />
-                    <span className="self-center">to</span>
+                    <span className="self-center text-black">to</span>
                     <input
                       type="time"
                       value={availabilitySettings.workingHours.end}
@@ -284,7 +334,7 @@ NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com`}
                         ...prev,
                         workingHours: { ...prev.workingHours, end: e.target.value }
                       }))}
-                      className="border border-gray-300 rounded px-3 py-2"
+                      className="border border-gray-300 text-black rounded px-3 py-2"
                     />
                   </div>
                 </div>
@@ -299,7 +349,7 @@ NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com`}
                       ...prev,
                       slotDuration: parseInt(e.target.value)
                     }))}
-                    className="border border-gray-300 rounded px-3 py-2 w-full"
+                    className="border text-black border-gray-300 rounded px-3 py-2 w-full"
                   >
                     <option value={15}>15 minutes</option>
                     <option value={30}>30 minutes</option>
@@ -312,7 +362,7 @@ NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com`}
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Working Days
                   </label>
-                  <div className="space-y-1">
+                  <div className="space-y-1 text-black">
                     {[
                       { value: 1, label: "Monday" },
                       { value: 2, label: "Tuesday" },
@@ -365,7 +415,6 @@ NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com`}
             </div>
           )}
 
-          {/* Bookings Section */}
           <div className="bg-white border border-gray-200 p-6 rounded-lg">
             <h3 className="text-lg font-semibold mb-4">Your Bookings</h3>
             {loading ? (
@@ -407,10 +456,8 @@ NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com`}
             )}
           </div>
 
-          {/* Calendar View */}
           {sellerData?.calendarConnected && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Busy Slots */}
               <div className="bg-white border border-gray-200 p-6 rounded-lg">
                 <h3 className="text-lg font-semibold mb-4">This Week's Busy Times</h3>
           {loading ? (
@@ -433,7 +480,6 @@ NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com`}
                 )}
               </div>
 
-              {/* Upcoming Events */}
               <div className="bg-white border border-gray-200 p-6 rounded-lg">
                 <h3 className="text-lg font-semibold mb-4">Upcoming Events</h3>
                 {loading ? (
@@ -462,8 +508,11 @@ NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com`}
           )}
         </div>
       ) : (
-        <p>Please sign in first.</p>
+        <div className="text-center py-12">
+          <p className="text-gray-500">Please sign in first.</p>
+        </div>
       )}
-    </main>
+      </main>
+    </div>
   );
 }

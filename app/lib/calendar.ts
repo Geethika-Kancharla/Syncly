@@ -1,5 +1,4 @@
-// Calendar integration functions for creating events
-// This is a simplified version - in production you'd use proper Google Calendar API
+
 
 export interface CalendarEvent {
   title: string;
@@ -11,14 +10,11 @@ export interface CalendarEvent {
 
 export const createCalendarEvent = async (event: CalendarEvent): Promise<boolean> => {
   try {
-    // In a production app, this would:
-    // 1. Get access token from Firebase Auth
-    // 2. Make API call to Google Calendar API
-    // 3. Create event with attendees
+   
     
     console.log("Creating calendar event:", event);
     
-    // Mock implementation - in production, replace with actual Google Calendar API call
+    
     const mockEvent = {
       id: `event_${Date.now()}`,
       summary: event.title,
@@ -36,8 +32,7 @@ export const createCalendarEvent = async (event: CalendarEvent): Promise<boolean
     };
     
     console.log("Mock calendar event created:", mockEvent);
-    
-    // Simulate API delay
+ 
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     return true;
@@ -56,7 +51,7 @@ export const createBookingEvents = async (
   endTime: string
 ): Promise<{ buyerEvent: boolean; sellerEvent: boolean }> => {
   try {
-    // Create event for buyer
+
     const buyerEvent = await createCalendarEvent({
       title: `${title} (with ${sellerEmail})`,
       description: description,
@@ -64,8 +59,7 @@ export const createBookingEvents = async (
       endTime,
       attendees: [sellerEmail]
     });
-    
-    // Create event for seller
+ 
     const sellerEvent = await createCalendarEvent({
       title: `${title} (with ${buyerEmail})`,
       description: description,

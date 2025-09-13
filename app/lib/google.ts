@@ -1,6 +1,3 @@
-// This file is now deprecated - using Firebase Auth with Google scopes instead
-// All calendar functionality has been moved to seller.ts
-
 export const initGoogleApi = () => {
   console.log("initGoogleApi is deprecated - using Firebase Auth instead");
   return Promise.resolve();
